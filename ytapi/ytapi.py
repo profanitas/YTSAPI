@@ -5,7 +5,17 @@ import requests
 
 class YTAPI():
     class CouldNotRetrieveTranscript(Exception):
-
+        """
+        Raised if transcript could not be retrieved.
+        """
+        ERROR_MESSAGE = (
+            'Could not get the transcript for the video {video_url}! '
+            'This usually happens if one of the following things is the case:\n'
+            ' - Subtitles have been disabled by the uploader\n'
+            ' - English transcript is not available\n'
+            ' - The video is no longer available.\n\n'
+            'If none of these things is the case, please create an issue at https://github.com/theabuseproject/ytapi/issues'
+        )
         def __init__(self, video_id):
             super(YTAPI.CouldNotRetrieveTranscript, self).__init__(
                 self.ERROR_MESSAGE.format(video_url=YTAPIFetcher.WATCH_URL.format(video_id=video_id))
