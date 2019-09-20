@@ -23,3 +23,20 @@ The implemented API Class is under `ytapi/ytapi.py`.
 import ytapi
 ytapi.YTAPI.get_transcript("Youtube Video ID")
 ```
+
+#### Example Usage
+
+```python
+>>> import ytapi
+>>> video = 'http://www.youtube.com/watch?v=BaW_jenozKc'
+>>> video_id = video.split('?v=')[1]
+>>> video_subtitles = ytapi.YTAPI.get_transcript(video_id)
+>>> print(video_subtitles)
+[{'text': 'This a test video\nfor youtube-dl', 'start': 0.26, 'duration': 3.33}, {'text': 'For more information\ncontact phihag@phihag.de', 'start': 3.59, 'duration': 6.08}]
+>>>
+>>> type(video_subtitles)
+<class 'list'>
+>>> type(video_subtitles[0])
+<class 'dict'>
+>>>
+```
