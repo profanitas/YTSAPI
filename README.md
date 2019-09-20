@@ -15,3 +15,11 @@ After cloning, install the dependencies using pip,
 ```
 pip install -r requirements.txt
 ```
+## Usage
+
+The implemented API Class is under `ytapi/ytapi.py`.
+
+```python
+import ytapi
+ytapi.YTAPI.get_transcript("Youtube Video ID")
+```
