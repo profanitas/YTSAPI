@@ -23,7 +23,7 @@ else:
     def unescape(string):
         return html_parser.unescape(string)
 
-class YTAPI():
+class YTSAPI():
     class CouldNotRetrieveTranscript(Exception):
         """
         Raised if transcript could not be retrieved.
@@ -54,7 +54,7 @@ class YTAPI():
         :rtype: [{'text': str, 'start': float, 'end': float}]
         """
         try:
-            return YTAPIParser(YTAPIFetcher(video_id, proxies).fetch()).parse()
+            return YTSAPIParser(YTAPIFetcher(video_id, proxies).fetch()).parse()
         except Exception:
             raise YTAPI.CouldNotRetrieveTranscript(video_id)
 
@@ -95,7 +95,7 @@ class YTAPIFetcher():
         else:
             return requests.get(url).text
 
-class YTAPIParser():
+class YTSAPIParser():
     HTML_TAG_REGEX = re.compile(r'<[^>]*>', re.IGNORECASE)
     def __init__(self, plain_data):
         self.plain_data = plain_data
