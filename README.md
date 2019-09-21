@@ -4,7 +4,13 @@ YTAPI (YouTube Transcribe API) for **[The Abuse Project](https://github.com/thea
 
 ## Install
 
-No module is published, as it's being used internally in **The Abuse Project**. If you want to use it in your project, you'll have to use this source repository.
+For using this library in your project, simple use `pip` to install the module.
+
+```
+pip install ytapi
+```
+
+The module published is in it's early stage as of now, as it's being used internally in **The Abuse Project**. If you want to develop it further, you'll have to use this source repository.
 
 ```
 git clone https://github.com/theabuseproject/YTAPI.git
@@ -17,7 +23,7 @@ pip install -r requirements.txt
 ```
 ## Usage
 
-The implemented API Class is under `ytapi/ytapi.py`.
+The implemented API class can be found under `ytapi/ytapi.py`.
 
 ```python
 import ytapi
