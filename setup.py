@@ -23,7 +23,7 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ),
     install_requires=[
-        'requests',
+        'requests', 'youtube_dl',
     ],
     entry_points={
         'console_scripts': [

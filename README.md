@@ -32,6 +32,8 @@ ytsapi.YTSAPI.get_transcript("Youtube Video ID")
 
 #### Example Usage
 
+#### Obtaining transcript of a YouTube video
+
 ```python
 >>> import ytsapi
 >>> video = 'http://www.youtube.com/watch?v=BaW_jenozKc'
@@ -44,5 +46,26 @@ ytsapi.YTSAPI.get_transcript("Youtube Video ID")
 <class 'list'>
 >>> type(video_subtitles[0])
 <class 'dict'>
+>>>
+```
+
+#### Downloading a YouTube video
+
+```python
+>>> import ytsapi
+>>> ytsapi.YTSAPI.get_video('BaW_jenozKc')
+YoutubeDL - Starting the download (BaW_jenozKc)
+[youtube] BaW_jenozKc: Downloading webpage
+[youtube] BaW_jenozKc: Downloading video info webpage
+WARNING: Unable to extract video title
+[download] BaW_jenozKc.mp4 has already been downloaded
+[download] 100% of 1.74MiB
+[youtube] BaW_jenozKc: Downloading webpage
+[youtube] BaW_jenozKc: Downloading video info webpage
+WARNING: Unable to extract video title
+[download] BaW_jenozKc.mp4 has already been downloaded
+[download] 100% of 1.74MiB
+YoutubeDL - Writing video in current working directory.
+YoutubeDL - Done.
 >>>
 ```
