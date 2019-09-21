@@ -7,7 +7,7 @@ def get_long_description():
 
 setuptools.setup(
     name="YTSAPI",
-    version="0.1.0",
+    version="0.1.1",
     author="Piyush Raj",
     author_email="piyush@linuxmail.org",
     description="YTSAPI is a python API which allows you to get the transcript/subtitle for a given YouTube video.",
