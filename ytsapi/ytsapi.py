@@ -1,6 +1,6 @@
 import sys, re
 from xml.etree import ElementTree
-import requests
+import requests, youtube_dl
 
 """
 Python version based imports
@@ -34,13 +34,31 @@ class YTSAPI():
             ' - Subtitles have been disabled by the uploader\n'
             ' - English transcript is not available\n'
             ' - The video is no longer available.\n\n'
-            'If none of these things is the case, please create an issue at https://github.com/theabuseproject/ytapi/issues'
+            'If none of these things is the case, please create an issue at https://github.com/theabuseproject/ytsapi/issues'
         )
         def __init__(self, video_id):
-            super(YTAPI.CouldNotRetrieveTranscript, self).__init__(
-                self.ERROR_MESSAGE.format(video_url=YTAPIFetcher.WATCH_URL.format(video_id=video_id))
+            super(YTSAPI.CouldNotRetrieveTranscript, self).__init__(
+                self.ERROR_MESSAGE.format(video_url=YTSAPIFetcher.WATCH_URL.format(video_id=video_id))
             )
             self.video_id = video_id
+
+    class CouldNotDownloadVideo(Exception):
+        """
+        Raised if transcript could not be retrieved.
+        """
+        ERROR_MESSAGE = (
+            'Could not get the following YouTube video {video_url}! '
+            'This usually happens if one of the following things is the case:\n'
+            ' - Video have been disabled by the uploader\n'
+            ' - The video is no longer available.\n\n'
+            'If none of these things is the case, please create an issue at https://github.com/theabuseproject/ytsapi/issues'
+        )
+        def __init__(self, video_id):
+            super(YTSAPI.CouldNotDownloadVideo, self).__init__(
+                self.ERROR_MESSAGE.format(video_url=YTSAPIFetcher.WATCH_URL.format(video_id=video_id))
+            )
+            self.video_id = video_id
+
 
     @classmethod
     def get_transcript(cls, video_id, proxies=None):
@@ -54,11 +72,30 @@ class YTSAPI():
         :rtype: [{'text': str, 'start': float, 'end': float}]
         """
         try:
-            return YTSAPIParser(YTAPIFetcher(video_id, proxies).fetch()).parse()
+            return YTSAPIParser(YTSAPIFetcher(video_id, proxies).fetch()).parse()
         except Exception:
-            raise YTAPI.CouldNotRetrieveTranscript(video_id)
+            raise YTSAPI.CouldNotRetrieveTranscript(video_id)
 
-class YTAPIFetcher():
+    @classmethod
+    def get_video(cls, video_id, proxies=None):
+        """
+        Downloads a single video using default param(s).
+        """
+        try:
+            print("YoutubeDL - Starting the download ({})".format(video_id))
+            YDL_URL = "http://www.youtube.com/watch?v={}"
+            ydl_opts = {'outtmpl': '%(id)s.%(ext)s'}
+            with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                result = ydl.extract_info(
+                    YDL_URL.format(video_id),
+                    download=True
+                )
+                ydl.download([YDL_URL.format(video_id)])
+            print('YoutubeDL - Writing video in current working directory.\nYoutubeDL - Done.')
+        except Exception:
+            raise YTSAPI.CouldNotDownloadVideo(video_id)
+
+class YTSAPIFetcher():
     WATCH_URL = 'https://www.youtube.com/watch?v={video_id}'
     API_BASE_URL = 'https://www.youtube.com/api/{api_url}'
     LANGUAGE_REGEX = re.compile(r'(&lang=.*&)|(&lang=.*)')
@@ -73,12 +110,12 @@ class YTAPIFetcher():
             fetched_site = requests.get(self.WATCH_URL.format(video_id=self.video_id)).text
         timedtext_url_start = fetched_site.find('timedtext')
         language = 'en'
-        response = self.YTAPICall(fetched_site, timedtext_url_start, language)
+        response = self.YTSAPICall(fetched_site, timedtext_url_start, language)
         if response:
             return response
         return None
 
-    def YTAPICall(self, fetched_site, timedtext_url_start, language='en'):
+    def YTSAPICall(self, fetched_site, timedtext_url_start, language='en'):
         url = self.API_BASE_URL.format(
             api_url=fetched_site[
                 timedtext_url_start:timedtext_url_start + fetched_site[timedtext_url_start:].find('"')
